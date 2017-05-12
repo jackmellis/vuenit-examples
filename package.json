@@ -1,0 +1,41 @@
+{
+  "name": "vuenit-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "ava": {
+    "files": "spec/**/*.spec.js",
+    "source": "src/**/*.{js,vue}",
+    "require": [
+      "./spec/helpers/setup.js"
+    ],
+    "concurrency": 8
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/vuenit-examples.git"
+  },
+  "author": "Jack Ellis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackmellis/vuenit-examples/issues"
+  },
+  "homepage": "https://github.com/jackmellis/vuenit-examples#readme",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "browser-env": "^2.0.31",
+    "require-extension-hooks": "^0.2.0",
+    "require-extension-hooks-babel": "^0.1.0",
+    "require-extension-hooks-vue": "^0.2.2",
+    "sinon": "^2.2.0",
+    "vuenit": "github:jackmellis/vuenit"
+  },
+  "dependencies": {
+    "vue": "^2.3.3",
+    "vue-router": "^2.5.3",
+    "vuex": "^2.3.1"
+  }
+}
