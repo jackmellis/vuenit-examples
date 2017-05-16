@@ -1,7 +1,7 @@
 export default {
   users : {
     state : {
-      userId : null
+      userId : null,
       users : []
     },
     getters : {
