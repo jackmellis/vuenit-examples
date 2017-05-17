@@ -28,9 +28,6 @@ export default {
         })
         .then(thing => {
           // once we've finished, let's navigate to the new thing's page
-          if (thing && thing.id === 7){
-            debugger;
-          }
           this.$router.push('/things/' + thing.id);
         });
     }
