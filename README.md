@@ -8,7 +8,7 @@ An example of testing that a component renders correctly. Demonstrates `mount` a
 
 ## Data
 This test shows how you can easily test computed values, get, set, and update **prop** values.  
-[source](src/components/data.vue)
+[source](src/components/data.vue)  
 [test](spec/components/data.spec.js)
 
 ## Slots
@@ -27,7 +27,7 @@ It's quite common for your component's data to come from a Vuex store. Vuenit in
 [test](spec/components/store.spec.js)
 
 ## Form Example
-This example tests a relatively simple component: a user can input a value, click on a submit button, send an API request, and update a Vuex store. This shows how tackle these different parts using Vuenit.
+This example tests a relatively simple component: a user can input a value, click on a submit button, send an API request, and update a Vuex store. This shows how tackle these different parts using Vuenit.  
 [source](src/components/create-a-thing.vue)  
 [test](spec/components/create-a-thing.spec.js)
 
