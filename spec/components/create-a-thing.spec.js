@@ -42,17 +42,16 @@ test('clicking submit button calls a DIFFERENT submit method', t => {
 });
 
 test('clicking submit button calls submit method', t => {
-  // So instead, we need to clone the component object and its methods, and then replace submit with a spy.
-  // We have to do this before we can mount the component.
+  // Vuenit exposes a hook just before creating the vm where it has a copy of the component that you can mutate safely
 
   let {options} = t.context;
   let spy = sinon.spy();
 
-  let c2 = Object.assign({}, c);
-  c2.methods = Object.assign({}, c2.methods);
-  c2.methods.submit = spy;
+  options.before = function (c) {
+    c.methods.submit = spy;
+  };
 
-  let vm = mount(c2, options);
+  let vm = mount(c, options);
 
   trigger(vm.$find('button'), 'click');
 
