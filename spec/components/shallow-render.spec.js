@@ -8,7 +8,7 @@ test.beforeEach(t => {
 });
 test.afterEach(t => {
   console.error.restore();
-  delete mount.config;
+  delete mount.config.shallow;
 });
 
 // This component has a child component that does some of its own stuff. We don't really want the child component to interfere with our tests on the parent component.
@@ -35,8 +35,9 @@ test('it stubs the child component', t => {
 // nice!
 
 // we could also have set this globally so all tests are shallow rendered:
+// { shallow : true } is the equivalent of { stubComponents : true, stubDirectives : true, stubFilters : true }
 test('it is always rendered shallow', t => {
-  mount.config = { shallow : true };
+  mount.config.shallow = true;
 
   mount(c);
   mount(c);
@@ -47,9 +48,7 @@ test('it is always rendered shallow', t => {
 
 // we can still do assertions to check that the parent contains the child component as stubComponents still renders some html
 test('it has a child component', t => {
-  let vm = mount(c, {
-    shallow : true
-  });
+  let vm = shallow(c);
 
   t.true(vm.$contains('deep-child'));
 });

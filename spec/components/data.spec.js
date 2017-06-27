@@ -68,8 +68,12 @@ test('it has a small size', t => {
 });
 
 test('it has a large size', t => {
-  let vm = mount(c);
-  vm.size = 'lg';
+  // we can also set data properties when mounting the component:
+  let vm = mount(c, {
+    data : {
+      size : 'lg'
+    }
+  });
 
   t.is(vm.computedStyles.width, '75%');
 });

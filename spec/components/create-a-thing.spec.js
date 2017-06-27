@@ -32,13 +32,14 @@ test('clicking submit button calls a DIFFERENT submit method', t => {
     // This is a bit of a nasty one because after mounting, vm.submit and @click="submit" are refering to different instances of the submit method. That means we can't just stub vm.submit as it won't be called by the click handler.
 
     let {vm} = t.context;
-    // switch of $http for now or we'll get all kinds of additional errors!
+    // switch off $http for now or we'll get all kinds of additional errors!
     vm.$http.otherwise().stop();
     sinon.stub(vm, 'submit');
 
     trigger(vm.$find('button'), 'click');
 
     t.false(vm.submit.called);
+    // even though we've stub vm.submit, triggering the click event still calls the original method
 });
 
 test('clicking submit button calls submit method', t => {
@@ -55,42 +56,40 @@ test('clicking submit button calls submit method', t => {
 
   trigger(vm.$find('button'), 'click');
 
-  t.true(spy.called);
+  t.true(spy.called); // tada
 });
 
 test('submit fires off ajax request', async t => {
   let vm = t.context.vm;
   let $http = vm.$http;
-  // we'll spy on the http.post method so we can check it's being called
-  sinon.spy($http, 'post');
   // the mock $http allows us to control what happens when a request is received
   // in this case we can tell it to just hang forever
   // this will stop the rest of the method from running as we're not really bothered about the next step just yet
-  $http.when('post', '/thing-creator').stop();
+  // calling expect allows us to later assert that a call was made to this endpoint
+  $http.expect('post', '/thing-creator').stop();
 
-  // let's set the name value. We're not worried about testing the click events in this test...
+  // let's set the name value directly. We're not worried about testing the click events in this test...
   vm.name = 'fred';
 
   vm.submit();
 
-  t.true($http.post.called);
-  t.true($http.post.calledWith('/thing-creator', { name : 'fred'}));
+  // now we tell $http to confirm that all expectations were met
+  t.notThrows(() => $http.assert());
 });
 
 test('submit sends dispatch event', async t => {
   let vm = t.context.vm;
   let {$http, $store} = vm;
   let thing = {id : 9};
-  let spy = sinon.stub().returns(thing);
 
   // when the ajax request is sent, let's intercept it and return some response data
   $http.when('post', '/thing-creator').return({ data : thing });
-  // when the dispatch is called, let's spy on it
-  $store.when('dispatch', 'things/addThing').call(spy);
+  // add an expectation that the dispatch will be called
+  $store.expect('dispatch', 'things/addThing').return(thing);
 
   await vm.submit();
 
-  t.true(spy.called);
+  t.notThrows(() => $store.assert());
 });
 
 test('submit sends router update', async t => {
