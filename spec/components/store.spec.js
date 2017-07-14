@@ -1,7 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
-import {mount, mockStore} from 'vuenit';
+import {build, mockStore} from 'vuenit';
 import c from '../../src/components/store';
+
+const mount = build(c, {
+  props : { id : 1 }
+});
 
 // here we have a component that relies on vuex's state, so we want to be able to easily give it one.
 
@@ -19,9 +23,8 @@ test('it returns user name from vuex store', t => {
     }
   };
 
-  let vm = mount(c, {
-    store : storeConfig,
-    props : { id : 1 }
+  let vm = mount({
+    store : storeConfig
   });
 
   t.is(vm.userName, 'jim bob');
@@ -41,9 +44,8 @@ test('user name is updated when store changes', async t => {
     }
   });
 
-  let vm = mount(c, {
-    inject : { $store },
-    props : { id : 1 }
+  let vm = mount({
+    inject : { $store }
   });
 
   t.is(vm.userName, 'jim bob');

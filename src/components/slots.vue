@@ -4,7 +4,7 @@
       <h1>{{header}}</h1>
     </slot>
     <slot>
-      <div>Content</div>
+      <div id="default_content">Content</div>
     </slot>
     <slot name="footer">
       <h5>{{footer}}</h5>

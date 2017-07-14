@@ -64,7 +64,7 @@ test('it triggers a click event', t => {
 
   sinon.stub(vm, 'onClick');
 
-  let child = vm.$findOne('deep-child');
+  let child = vm.$find('deep-child');
   child.$emit('click');
 
   t.true(vm.onClick.called);

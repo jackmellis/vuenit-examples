@@ -11,16 +11,15 @@ test('commits a new thing', async t => {
       actions
     }
   });
-  let spy = sinon.spy();
   let thing = {isAThing : true};
 
   // the mock store allows us to intercept a commit and on it
   // so we'll attach a spy to the ADD_THING commit
-  store.when('commit', 'things/ADD_THING').call(spy);
+  store.expect('commit', 'things/ADD_THING', 1);
 
   // dispatch is wrapped in a promise so we have to await the result
   let result = await store.dispatch('things/addThing', thing);
 
-  t.true(spy.called);
+  store.assert(); // will throw if a things/ADD_THING commit was not fired off
   t.is(result, thing);
 });

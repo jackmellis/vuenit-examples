@@ -1,6 +1,6 @@
 import test from 'ava';
 import sinon from 'sinon';
-import {mount, trigger} from 'vuenit';
+import {mount, build} from 'vuenit';
 import c from '../../src/components/create-a-thing';
 
 // This is a more complicated test. We want to test that the user can input a name into the name field, click on the submit button, fire off an ajax request, update the store, and update the router.
@@ -13,18 +13,20 @@ test.beforeEach(t => {
     store : true, // creates a mock vuex store
     router : true, // creates a mock router
   };
-  let vm = mount(c, options);
+  let mount = build(c, options); // creates a resuable mount function
 
-  t.context = {vm, options};
+  let vm = mount();
+
+  t.context = {vm, mount};
 });
 
 test('user enters name in input', t => {
   let vm = t.context.vm;
   // get the input and mimick the user typing a value
-  let input = vm.$findOne('#name');
+  let input = vm.$find('#name');
   input.value = 'fred';
   // this triggers an input event on the element
-  trigger(input, 'input');
+  input.$trigger('input');
   t.is(vm.name, 'fred');
 });
 
@@ -36,7 +38,7 @@ test('clicking submit button calls a DIFFERENT submit method', t => {
     vm.$http.otherwise().stop();
     sinon.stub(vm, 'submit');
 
-    trigger(vm.$find('button'), 'click');
+    vm.$find('button').$trigger('click');
 
     t.false(vm.submit.called);
     // even though we've stub vm.submit, triggering the click event still calls the original method
@@ -45,16 +47,16 @@ test('clicking submit button calls a DIFFERENT submit method', t => {
 test('clicking submit button calls submit method', t => {
   // Vuenit exposes a hook just before creating the vm where it has a copy of the component that you can mutate safely
 
-  let {options} = t.context;
+  let {mount} = t.context;
   let spy = sinon.spy();
 
-  options.before = function (c) {
-    c.methods.submit = spy;
-  };
+  let vm = mount({
+    before : function (c) {
+      c.methods.submit = spy;
+    }
+  });
 
-  let vm = mount(c, options);
-
-  trigger(vm.$find('button'), 'click');
+  vm.$find('button').$trigger('click');
 
   t.true(spy.called); // tada
 });
